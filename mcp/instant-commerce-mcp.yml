@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+status: published
+source: https://instant.so/changelog
+description: >-
+  Instant operates a hosted Model Context Protocol (MCP) server that lets Claude
+  and other AI tools connect directly to Instant to build Shopify pages. The
+  capability was announced in the Instant product changelog on 2026-05-07
+  ("Instant MCP — Connect Claude and other AI tools directly to Instant via
+  Model Context Protocol for seamless page creation"). A remote endpoint at
+  https://api.instant.so/mcp responds 401 (authentication required) to
+  unauthenticated probes, confirming a live, auth-gated server. The tool list is
+  not published publicly and is gated behind authentication, so it is not
+  enumerated here.
+server:
+  name: instant
+  transport: http
+  url: https://api.instant.so/mcp
+  auth: required
+  auth_probe_status: 401
+tools: []
+notes:
+  - Server confirmed live via HTTP 401 on https://api.instant.so/mcp (auth required).
+  - Announced in the 2026-05-07 "Instant MCP" changelog entry.
+  - Tool schema is behind authentication; not captured to avoid fabrication.

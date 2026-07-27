@@ -1,8 +1,18 @@
 aid: instant-commerce
 name: Instant Commerce
-description: 'Instant Commerce is a company surfaced as a portfolio company of hv-capital and added to
-  the API Evangelist network as a stub for enrichment. Sector: ai-enterprise-software. This profile is
-  a lead awaiting the enrichment pipeline.'
+description: >-
+  Instant Commerce (product: Instant, instant.so) is an Amsterdam- and
+  Miami-based AI-native eCommerce software company that builds an AI-powered,
+  no-code page builder for Shopify. Merchants describe what they want and
+  Instant's AI agents generate complete store pages — landing pages, homepages,
+  product and collection pages, popups and cart drawers — including layouts,
+  copy and AI-generated imagery, plus Figma-to-Shopify conversion, A/B testing
+  and conversion-rate optimization. The platform serves roughly 25,000 brands,
+  ships an official developer SDK for building custom React blocks, and exposes
+  a hosted Model Context Protocol (MCP) server so Claude and other AI tools can
+  build pages directly. The company has raised about $10M and is backed by HV
+  Capital. Added to the API Evangelist network as a portfolio-company lead and
+  enriched from public sources.
 url: https://raw.githubusercontent.com/api-evangelist/instant-commerce/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,15 +20,104 @@ x-backed-by:
 - hv-capital
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
+image: https://instantcommerce.io/og-image.jpg
 tags:
 - Company
 - Ai Enterprise Software
+- Ecommerce
+- Shopify
+- No Code
+- Page Builder
+- Artificial Intelligence
+- AI Agents
+- Conversion Rate Optimization
+- Developer Tools
 apis: []
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: Website
+  name: Instant (product)
+  url: https://instant.so/
+- type: Company
+  name: Instant Commerce
+  url: https://instantcommerce.io/
+- type: DeveloperPortal
+  name: Instant
+  url: https://instant.so/
+- type: Documentation
+  name: Instant Help Center
+  url: https://docs.instant.so
+- type: Pricing
+  name: Pricing
+  url: https://instant.so/pricing
+- type: SignUp
+  name: Sign up
+  url: https://app.instant.so/register
+- type: Login
+  name: Log in
+  url: https://app.instant.so/login
+- type: Blog
+  name: Blog
+  url: https://instant.so/blog
+- type: Support
+  name: Support
+  url: mailto:support@instant.so
+- type: TermsOfService
+  name: Terms of Service
+  url: https://instant.so/terms-of-service
+- type: PrivacyPolicy
+  name: Privacy Policy
+  url: https://instant.so/privacy-policy
+- type: StatusPage
+  name: Status
+  url: https://status.instant.so/
+- type: Roadmap
+  name: Roadmap / Feedback
+  url: https://feedback.instant.so
+- type: GitHubOrganization
+  name: instantcommerce on GitHub
+  url: https://github.com/instantcommerce
+- type: ChangeLog
+  name: Product Updates
+  url: https://instant.so/changelog
+- type: ChangeLog
+  name: Changelog (structured)
+  url: changelog/instant-commerce-changelog.yml
+- type: Packages
+  name: First-party packages
+  url: packages/instant-commerce-packages.yml
+- type: SDKs
+  name: Instant SDK
+  url: packages/instant-commerce-packages.yml
+- type: MCPServer
+  name: Instant MCP server
+  url: mcp/instant-commerce-mcp.yml
+- type: LLMsTxt
+  name: llms.txt
+  url: llms/instant-commerce-llms.txt
+- type: DomainSecurity
+  name: Domain security probe
+  url: security/instant-commerce-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

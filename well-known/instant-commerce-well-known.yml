@@ -1,0 +1,34 @@
+generated: '2026-07-19'
+method: searched
+description: >-
+  Results of probing the /.well-known/ discovery surface for the Instant
+  Commerce public hosts. Status is the HTTP code observed at fetch time. No
+  first-party well-known documents were found: instant.so returns 404 for every
+  probed path, and docs.instant.so/.well-known/security.txt returns 200 but is
+  the generic Intercom help-center security.txt (Canonical:
+  https://app.intercom.com/.well-known/security.txt), i.e. the help-desk vendor's
+  file, not Instant's own — so it is recorded but not saved as first-party and no
+  SecurityTxt pointer is emitted. Absence of records is valid, expected data.
+hosts:
+  - host: https://instant.so
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://instantcommerce.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+  - host: https://docs.instant.so
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        first_party: false
+        note: Generic Intercom help-center security.txt (Canonical app.intercom.com); not Instant's own.

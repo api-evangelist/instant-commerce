@@ -1,0 +1,38 @@
+generated: '2026-07-19'
+method: searched
+source: https://instant.so/changelog
+description: >-
+  Structured capture of Instant's dated product changelog (Product Updates).
+  Instant does not publish an explicit version scheme; updates are organized
+  chronologically by release date. The live changelog at
+  https://instant.so/changelog is the source of truth; this artifact records the
+  recent window only.
+docs: https://instant.so/changelog
+versioning:
+  scheme: date-based product updates (no semantic version)
+  current: '2026-07-16'
+entries:
+  - date: '2026-07-16'
+    title: Quick Actions
+    highlights:
+      - Press Cmd+K to open the command menu and access everything from one place.
+  - date: '2026-07-09'
+    title: Redesigned Interface
+    highlights:
+      - Comprehensive redesign prioritizing speed, simplicity, and focused workflow.
+  - date: '2026-06-19'
+    title: Brand Intelligence
+    highlights:
+      - Instant AI understands your brand before generating layouts.
+  - date: '2026-05-07'
+    title: Instant MCP
+    highlights:
+      - Connect Claude and other AI tools directly to Instant via Model Context Protocol for seamless page creation.
+  - date: '2026-05-07'
+    title: Tabs 2.0 & Build carts with Instant AI agents
+    highlights:
+      - Tabs element supports dynamic styling; AI-powered cart building with Shopify integration.
+  - date: '2026-04-15'
+    title: Instant Spring Event '26
+    highlights:
+      - An AI team inside the canvas — describe what you want and Instant builds it.

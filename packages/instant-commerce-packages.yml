@@ -1,0 +1,51 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/instantcommerce
+description: >-
+  First-party packages published by the Instant Commerce GitHub organization
+  (github.com/instantcommerce, "All visual, No code" → instant.so) and confirmed
+  on the public npm registry (registry.npmjs.org). @instantcommerce/sdk is the
+  marquee client library used to build custom React blocks for the Instant page
+  builder; the remaining packages are open-source developer tooling maintained
+  by the company. Registry HTTP status recorded at fetch time.
+packages:
+  - language: javascript
+    registry: npm
+    name: "@instantcommerce/sdk"
+    url: https://www.npmjs.com/package/@instantcommerce/sdk
+    source: https://github.com/instantcommerce/instant-sdk
+    install: npm install @instantcommerce/sdk
+    license: MIT
+    version: 1.0.0
+    official: true
+    note: SDK for building custom React blocks for the Instant platform.
+  - language: javascript
+    registry: npm
+    name: eslint-config-instant
+    url: https://www.npmjs.com/package/eslint-config-instant
+    source: https://github.com/instantcommerce/eslint-config-instant
+    install: npm install eslint-config-instant
+    license: MIT
+    version: 2.5.0
+    official: true
+    note: Shareable ESLint + Prettier config used across Instant Commerce projects.
+  - language: javascript
+    registry: npm
+    name: next-api-decorators
+    url: https://www.npmjs.com/package/next-api-decorators
+    source: https://github.com/instantcommerce/next-api-decorators
+    install: npm install next-api-decorators
+    license: MIT
+    version: 2.0.2
+    official: true
+    note: Decorators for typed Next.js API routes with request validation.
+  - language: javascript
+    registry: npm
+    name: next-password-protect
+    url: https://www.npmjs.com/package/next-password-protect
+    source: https://github.com/instantcommerce/next-password-protect
+    install: npm install next-password-protect
+    license: MIT
+    version: 1.8.0
+    official: true
+    note: Password-protect Next.js deployments.
