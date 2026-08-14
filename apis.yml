@@ -7,10 +7,16 @@ description: >-
   Instant's AI agents generate complete store pages — landing pages, homepages,
   product and collection pages, popups and cart drawers — including layouts,
   copy and AI-generated imagery, plus Figma-to-Shopify conversion, A/B testing
-  and conversion-rate optimization. The platform serves roughly 25,000 brands,
-  ships an official developer SDK for building custom React blocks, and exposes
-  a hosted Model Context Protocol (MCP) server so Claude and other AI tools can
-  build pages directly. The company has raised about $10M and is backed by HV
+  and conversion-rate optimization. The platform serves roughly 25,000 brands.
+  Instant's agent surface is a hosted, remote Model Context Protocol (MCP) server
+  at api.instant.so/mcp, shipped 2026-06-02 and labelled beta, which lets Claude
+  Desktop, Cursor and other MCP clients list, create, edit, publish and unpublish
+  landing pages and drive the AI page-builder agent using a project-scoped bearer
+  access token issued in the dashboard. There is no OpenAPI, no public REST
+  reference and no OAuth; an earlier generation of developer tooling — the
+  @instantcommerce/sdk React block SDK, the @instantcommerce/cli and the
+  developer docs at docs.instantcommerce.io — is still published but has had no
+  release since 2023. The company has raised about $10M and is backed by HV
   Capital. Added to the API Evangelist network as a portfolio-company lead and
   enriched from public sources.
 url: https://raw.githubusercontent.com/api-evangelist/instant-commerce/refs/heads/main/apis.yml
@@ -21,19 +27,21 @@ x-backed-by:
 x-tier: stub
 x-tier-reason: portfolio-lead
 accessModel:
-  pricing: unknown
-  onboarding: unknown
-  trial: false
-  try_now: false
+  pricing: freemium
+  onboarding: self-serve
+  trial: true
+  try_now: true
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
+  label: Freemium (free trial) · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-08-13'
   method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-08-13'
 image: https://instantcommerce.io/og-image.jpg
 tags:
 - Company
@@ -46,7 +54,59 @@ tags:
 - AI Agents
 - Conversion Rate Optimization
 - Developer Tools
-apis: []
+- MCP
+- Agent Native
+apis:
+- aid: instant-commerce:instant-mcp-server
+  name: Instant MCP Server
+  description: >-
+    Hosted, remote Model Context Protocol server that lets external AI clients —
+    Claude Desktop, Cursor and other MCP clients — work with an Instant project.
+    Documented tools list, create, edit, publish and unpublish landing pages,
+    send natural-language instructions to Instant's AI page-builder agent, and
+    fetch page details (optionally with a screenshot), project info and the AI
+    credit balance. Scope is landing pages ONLY — product and collection
+    templates, sections, headers and footers, the cart and the storefront home
+    page are explicitly out of scope for agents. Authentication is a
+    project-scoped access token created in the dashboard by an owner or admin and
+    sent as an HTTP bearer token; there is no OAuth and no discovery metadata.
+    Announced 2026-06-02 and labelled a beta feature by the provider. The live
+    tool list is auth-gated (401), so tool names and input schemas are not
+    enumerated in this profile.
+  humanURL: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp
+  baseURL: https://api.instant.so/mcp
+  tags:
+  - mcp
+  - agent-native
+  - ecommerce
+  - shopify
+  - page-builder
+  - landing-pages
+  - ai-agents
+  - content-management
+  properties:
+  - type: MCPServer
+    url: mcp/instant-commerce-mcp.yml
+  - type: MCPServer
+    url: https://api.instant.so/mcp
+  - type: Documentation
+    url: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp
+  - type: Authentication
+    url: authentication/instant-commerce-authentication.yml
+  - type: Conventions
+    url: conventions/instant-commerce-conventions.yml
+  - type: ErrorCatalog
+    url: errors/instant-commerce-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/instant-commerce-rate-limits.yml
+  - type: Plans
+    url: plans/instant-commerce-plans-pricing.yml
+  - type: Lifecycle
+    url: lifecycle/instant-commerce-lifecycle.yml
+  - type: Conformance
+    url: conformance/instant-commerce-conformance.yml
+  - type: DataModel
+    url: data-model/instant-commerce-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -116,8 +176,47 @@ common:
 - type: DomainSecurity
   name: Domain security probe
   url: security/instant-commerce-domain-security.yml
+- type: Documentation
+  name: Developer Documentation (block SDK + CLI)
+  url: https://docs.instantcommerce.io/
+- type: GettingStarted
+  name: Getting-started checklist
+  url: https://docs.instant.so/en/articles/16068139-the-getting-started-checklist
+- type: Authentication
+  name: Authentication profile
+  url: authentication/instant-commerce-authentication.yml
+- type: Conventions
+  name: API conventions and runtime semantics
+  url: conventions/instant-commerce-conventions.yml
+- type: ErrorCatalog
+  name: Observed error catalog
+  url: errors/instant-commerce-problem-types.yml
+- type: Conformance
+  name: Standards conformance
+  url: conformance/instant-commerce-conformance.yml
+- type: Lifecycle
+  name: Versioning, deprecation and status posture
+  url: lifecycle/instant-commerce-lifecycle.yml
+- type: Plans
+  name: Plans and pricing
+  url: plans/instant-commerce-plans-pricing.yml
+- type: RateLimits
+  name: Rate limits and consumption quotas
+  url: rate-limits/instant-commerce-rate-limits.yml
+- type: CLI
+  name: Instant CLI
+  url: cli/instant-commerce-cli.yml
+- type: Components
+  name: Storefront SDK and component surface
+  url: components/instant-commerce-components.yml
+- type: Sandbox
+  name: CLI block-development sandbox
+  url: sandbox/instant-commerce-sandbox.yml
+- type: DataModel
+  name: Entity graph
+  url: data-model/instant-commerce-data-model.yml
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 11
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
