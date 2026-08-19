@@ -1,0 +1,65 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.instantcommerce.io/developer/getting-started/sandbox
+description: >-
+  Instant ships a sandbox, but it is a LOCAL BLOCK-DEVELOPMENT sandbox delivered
+  by the CLI, not a test-mode API environment. There is no test/live key pair, no
+  test-mode host, no test cards or hosted test tokens, no time simulation and no
+  fixture/trigger tooling — Instant is not a payments or transactional API and
+  publishes none of those. What it publishes is an isolated local preview of a
+  single block against a real connected store, which is recorded faithfully below.
+docs: https://docs.instantcommerce.io/developer/getting-started/sandbox
+kind: local-development-sandbox
+test_mode_keys: none
+test_credentials: none
+test_data_fixtures: none
+time_simulation: none
+sandbox:
+  name: Instant CLI sandbox
+  enabled_by_default: true
+  activation: >-
+    Enabled by default when initializing a new project with `instant init`;
+    started with `instant dev`.
+  purpose: >-
+    Isolates one block at a time so a developer can build an entire block with a
+    preview of the Instant Commerce admin environment without leaving their local
+    environment.
+  surfaces:
+    - name: Toolbar
+      capabilities:
+        - Switch between connected stores when logged in.
+        - Bookmark specific blocks for highlighting.
+        - Reload a block, open it in a separate browser window, toggle the side panel.
+    - name: Left panel
+      capabilities:
+        - Search blocks (ctrl+k / cmd+k).
+        - Bookmarked blocks listed above all blocks.
+    - name: Viewport
+      capabilities:
+        - Preview across device sizes, or set width/height manually.
+        - Toggle light/dark background and preview scaling.
+    - name: Right panel
+      capabilities:
+        - Preview the customizer schema and the content schema; fields appear once declared in the block's code.
+  data_source: >-
+    A real connected store selected from the store dropdown — the sandbox does
+    not provide synthetic commerce data.
+  caveat: >-
+    The provider warns that customizer and content settings in the sandbox are
+    for previewing only; once published, a block uses the customizer settings
+    selected in the admin and the content values from the headless CMS.
+free_tier_as_trial:
+  note: >-
+    The closest thing to an evaluation environment for the product surface is the
+    Free plan, which allows unlimited previews and publishing of 1 page, 1 section
+    and 1 blog post, and a 7-day free trial on Starter. Recorded here because a
+    developer evaluating Instant has no API sandbox to fall back on.
+  docs: https://instant.so/pricing
+mcp_sandbox:
+  available: false
+  note: >-
+    There is no sandbox or dry-run mode for the MCP server. Access tokens are
+    issued against a real project and agent tools consume real AI credits, so
+    there is no way to exercise the agent surface without spending a paid quota
+    against live content.
+  checked: '2026-08-13'

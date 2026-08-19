@@ -1,0 +1,156 @@
+generated: '2026-08-13'
+method: searched
+source: https://instant.so/pricing
+description: >-
+  Instant publishes public, self-serve pricing for four tiers plus a
+  contact-sales Enterprise/Agency tier. Prices below are the values rendered on
+  https://instant.so/pricing at fetch time; quotas and feature gates are
+  cross-checked against the help center's Compare plans and Plan limits
+  reference articles, which agree with the pricing page on every quota.
+docs:
+  - https://instant.so/pricing
+  - https://docs.instant.so/en/articles/16068082-compare-plans-free-starter-pro-business.md
+  - https://docs.instant.so/en/articles/16068085-plan-limits-reference.md
+currency: USD
+billing_periods:
+  - monthly
+  - yearly
+billing_note: >-
+  The pricing page carries a Monthly/Yearly toggle advertising "Save 20%", and
+  the FAQ confirms "When you pay annually, you'll save 20%". The toggle is
+  client-side, so the static page yields one price per tier; the values recorded
+  in `price` are those rendered in the served HTML. $31 and $199 are exactly 20%
+  off $39 and $249 respectively, both of which also appear in the page markup,
+  so the recorded figures are most likely the annual-billing monthly-equivalent
+  rate. Recorded as observed rather than resolved, because the page does not
+  state which mode it is showing.
+plan_count: 5
+public_plan_count: 4
+plans:
+  - name: Free
+    price: 0
+    currency: USD
+    period: month
+    tagline: No risk, free forever
+    self_serve: true
+    included:
+      published_pages: 1
+      published_sections: 1
+      published_blog_posts: 1
+      previews: unlimited
+      templates_library: 800+
+      ai_credits: 0
+      ab_test_sessions: 0
+      reusable_sections: 0
+      reusable_templates: 0
+    features:
+      - Figma plugin
+      - Community access
+      - Unlimited previews
+      - Support via email
+    restrictions:
+      - '"Built with Instant" badge shown on the storefront'
+      - No monthly AI credits — the AI Agent, Studio and MCP agent tools will not run
+      - No A/B testing
+      - No Liquid code block
+      - Cannot publish the home page
+    agent_note: >-
+      MCP is technically reachable on Free, but every agent tool that builds or
+      edits a page consumes AI credits, of which Free has none.
+  - name: Starter
+    price: 31
+    currency: USD
+    period: month
+    tagline: Ideal starter plan
+    description: >-
+      The entry paid tier for merchants launching on Instant. The pricing page
+      states "Free 7 day trial period available" on this tier, and sign-up is
+      self-serve with no sales contact.
+    self_serve: true
+    trial: 7-day free trial available
+    included:
+      published_pages: unlimited
+      ai_credits: 1000
+      ab_test_sessions: 0
+      reusable_sections: 10
+      reusable_templates: 3
+    features:
+      - Everything in Free
+      - Unlimited landing pages and blogs
+      - Publish the home page
+      - Liquid code blocks
+      - Remove Instant branding
+      - 24/7 live chat support
+    restrictions:
+      - No cart drawer publishing
+      - No draft-theme publishing
+      - No A/B testing
+      - Shopify Markets on sections only
+  - name: Pro
+    price: 79
+    currency: USD
+    period: month
+    tagline: For growing businesses
+    most_popular: true
+    self_serve: true
+    included:
+      published_pages: unlimited
+      ai_credits: 4000
+      ab_test_sessions: 10000
+      reusable_sections: 20
+      reusable_templates: 5
+    features:
+      - Everything in Starter
+      - Cart drawers
+      - Cart analytics
+      - Publish to draft Shopify themes
+      - 24/7 live chat support
+    restrictions:
+      - Shopify Markets not supported across all layout types
+  - name: Business
+    price: 199
+    currency: USD
+    period: month
+    tagline: For growth-stage companies
+    self_serve: true
+    included:
+      published_pages: unlimited
+      ai_credits: 10000
+      ab_test_sessions: 100000
+      reusable_sections: 50
+      reusable_templates: 10
+    features:
+      - Everything in Pro
+      - Shopify Markets across all layout types
+      - Priority+ support
+  - name: Enterprise / Agency
+    price: null
+    currency: USD
+    period: month
+    tagline: For Shopify Plus & agencies
+    self_serve: false
+    contact_sales: true
+    cta: Schedule a call
+    included:
+      published_pages: unlimited
+      reusable_sections: unlimited
+      reusable_templates: unlimited
+      ai_credits: flexible
+      ab_test_sessions: flexible
+    features:
+      - Everything in Business
+      - 1-on-1 onboarding
+      - Dedicated Slack channel
+    note: >-
+      Limits and price are arranged directly and are not published; the help
+      center states Enterprise and partner plans have their own limits shown only
+      in the account's Settings → Plans.
+api_access:
+  gated: false
+  note: >-
+    Access tokens and the MCP endpoint are not sold as a separate API plan and no
+    tier gates token creation. The practical gate is AI credits: agent tools
+    require a credit balance, so the Free tier cannot run them.
+refunds:
+  policy: 30-day refund guarantee
+  docs: https://docs.instant.so/en/articles/16068086-refund-policy.md

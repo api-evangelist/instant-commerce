@@ -1,0 +1,97 @@
+generated: '2026-08-13'
+method: probed
+source: live unauthenticated probes of https://api.instant.so
+description: >-
+  Error catalog for the Instant API host. There is no OpenAPI to derive 4xx/5xx
+  responses from and Instant publishes no error reference, so every entry below
+  was OBSERVED on a live unauthenticated request to api.instant.so and is
+  transcribed verbatim from the response body. The envelope is the NestJS/Express
+  default shape — {"message","error","statusCode"} — and is NOT RFC 9457 problem
+  detail: responses carry Content-Type application/json, not
+  application/problem+json, and no type/title/detail/instance members. Only the
+  errors an anonymous client can reach are recorded; authenticated error paths
+  are unknown and are deliberately not guessed.
+format: nestjs-default
+rfc9457: false
+content_type: application/json; charset=utf-8
+envelope:
+  fields:
+    - name: message
+      type: string
+      description: Human-readable error message. Occasionally an array of strings on validation failures in this framework, but not observed here.
+    - name: error
+      type: string
+      description: HTTP reason phrase, e.g. "Unauthorized", "Not Found".
+    - name: statusCode
+      type: integer
+      description: Numeric HTTP status, duplicating the response status line.
+  example: '{"message":"Missing Authorization header","error":"Unauthorized","statusCode":401}'
+  missing_from_rfc9457:
+    - type
+    - title
+    - detail
+    - instance
+problem_types:
+  - status: 401
+    error: Unauthorized
+    message: Missing Authorization header
+    surface: https://api.instant.so/mcp
+    trigger: A request to an authenticated route with no Authorization header.
+    remediation: >-
+      Create an access token in the Instant dashboard (Settings → General →
+      Access tokens) and send it as `Authorization: Bearer <token>`.
+    observed: '2026-08-13'
+  - status: 401
+    error: Unauthorized
+    message: Invalid or revoked token
+    surface: https://api.instant.so/mcp
+    trigger: >-
+      A request carrying an Authorization bearer token that does not resolve, or
+      that has been revoked in the dashboard.
+    remediation: >-
+      Issue a new token. Revocation is immediate and irreversible; a token is
+      also auto-revoked when its creating member loses access to the project.
+    observed: '2026-08-13'
+    note: >-
+      The distinction between this message and "Missing Authorization header" is
+      the only public signal of Instant's auth state machine.
+  - status: 404
+    error: Not Found
+    message: Cannot <METHOD> <path>
+    surface: https://api.instant.so/*
+    trigger: Any unregistered route on the API host.
+    remediation: Check the path; the only documented public route is /mcp.
+    observed: '2026-08-13'
+    note: >-
+      Message interpolates the HTTP method and path, e.g. "Cannot POST
+      /mcp-does-not-exist-xyz123". Useful as a route-existence discriminator: a
+      registered but guarded route returns 401 instead.
+graphql_errors:
+  surface: https://api.instant.so/graphql
+  note: >-
+    An undocumented Apollo Server GraphQL endpoint is present on the same host
+    and returns the standard GraphQL {"errors":[{message,locations,extensions}]}
+    envelope with HTTP 400. Recorded for completeness; this surface is not
+    documented for third-party use and is not registered as an API in apis.yml.
+  observed:
+    - status: 400
+      code: GRAPHQL_VALIDATION_FAILED
+      validationErrorCode: INTROSPECTION_DISABLED
+      message: >-
+        GraphQL introspection is not allowed by Apollo Server, but the query
+        contained __schema or __type.
+      observed: '2026-08-13'
+    - status: 400
+      message: >-
+        This operation has been blocked as a potential Cross-Site Request Forgery
+        (CSRF).
+      trigger: A request without a preflight-triggering Content-Type or the apollo-require-preflight header.
+      observed: '2026-08-13'
+gaps:
+  - >-
+    No published error reference exists on docs.instant.so or
+    docs.instantcommerce.io. Error semantics beyond the anonymous 401/404 path
+    cannot be documented without an authenticated token.
+  - >-
+    No error code vocabulary, no machine-readable error type URIs, and no
+    Retry-After or rate-limit signalling was observed.

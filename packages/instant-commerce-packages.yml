@@ -1,13 +1,26 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 source: https://github.com/instantcommerce
 description: >-
   First-party packages published by the Instant Commerce GitHub organization
   (github.com/instantcommerce, "All visual, No code" → instant.so) and confirmed
-  on the public npm registry (registry.npmjs.org). @instantcommerce/sdk is the
-  marquee client library used to build custom React blocks for the Instant page
-  builder; the remaining packages are open-source developer tooling maintained
-  by the company. Registry HTTP status recorded at fetch time.
+  on the public npm registry (registry.npmjs.org). @instantcommerce/sdk and
+  @instantcommerce/cli are the marquee developer tooling for building and
+  publishing custom React blocks to the Instant platform; the remaining packages
+  are open-source Next.js/lint tooling maintained by the company. Every entry
+  carries the latest published version and its ISO release date read from
+  registry.npmjs.org at fetch time (2026-08-13).
+docs: https://docs.instantcommerce.io/
+currency_note: >-
+  CURRENCY FINDING — the first-party developer packages are stale. The block SDK
+  (@instantcommerce/sdk 1.0.0) last published 2022-12-22 and its CLI companion
+  (@instantcommerce/cli 1.3.0) last published 2023-05-12, while the company's
+  live product surface (instant.so, the AI page builder and its MCP server,
+  shipped 2026-06-02) has moved on entirely. The React-block SDK and its
+  Docusaurus developer docs at docs.instantcommerce.io describe the earlier
+  headless-storefront generation of the product and have not been released
+  against in over three years. Recorded as observed registry metadata, not as a
+  judgement about support status, which the company does not publish.
 packages:
   - language: javascript
     registry: npm
@@ -17,8 +30,29 @@ packages:
     install: npm install @instantcommerce/sdk
     license: MIT
     version: 1.0.0
+    published: '2022-12-22'
+    release_count: 4
     official: true
-    note: SDK for building custom React blocks for the Instant platform.
+    note: >-
+      SDK for building completely custom React-based blocks and publishing them
+      to the Instant platform. Latest release 1.0.0 (2022-12-22); registry
+      metadata last modified 2023-02-17. Backing repo last pushed 2023-05-12.
+  - language: javascript
+    registry: npm
+    name: "@instantcommerce/cli"
+    url: https://www.npmjs.com/package/@instantcommerce/cli
+    source: https://github.com/instantcommerce/instant-sdk
+    install: npm install -g @instantcommerce/cli
+    license: MIT
+    version: 1.3.0
+    published: '2023-05-12'
+    release_count: 20
+    official: true
+    note: >-
+      The Instant CLI — login/select/init/generate/dev/add/publish for block
+      development, documented at
+      https://docs.instantcommerce.io/developer/reference/commands. Command
+      surface captured in cli/instant-commerce-cli.yml.
   - language: javascript
     registry: npm
     name: eslint-config-instant
@@ -27,8 +61,14 @@ packages:
     install: npm install eslint-config-instant
     license: MIT
     version: 2.5.0
+    published: '2023-07-20'
+    release_count: 22
     official: true
-    note: Shareable ESLint + Prettier config used across Instant Commerce projects.
+    note: >-
+      Shareable ESLint + Prettier config used across Instant Commerce projects.
+      Latest release 2.5.0 (2023-07-20), but registry metadata was modified
+      2026-02-02 and the repo was pushed 2026-02-02 — the only first-party
+      package with 2026 activity.
   - language: javascript
     registry: npm
     name: next-api-decorators
@@ -37,8 +77,12 @@ packages:
     install: npm install next-api-decorators
     license: MIT
     version: 2.0.2
+    published: '2023-02-26'
+    release_count: 7
     official: true
-    note: Decorators for typed Next.js API routes with request validation.
+    note: >-
+      Decorators for typed Next.js API routes with request validation. General
+      open-source tooling (428 stars), not an Instant API client.
   - language: javascript
     registry: npm
     name: next-password-protect
@@ -47,5 +91,28 @@ packages:
     install: npm install next-password-protect
     license: MIT
     version: 1.8.0
+    published: '2022-09-07'
+    release_count: 1
     official: true
-    note: Password-protect Next.js deployments.
+    note: >-
+      Password-protect Next.js deployments. General open-source tooling (318
+      stars), not an Instant API client.
+absent:
+  - registry: pypi
+    checked: '2026-08-13'
+    note: No first-party Python client published or referenced in any Instant surface.
+  - registry: rubygems
+    checked: '2026-08-13'
+    note: No first-party Ruby client published or referenced in any Instant surface.
+  - registry: packagist
+    checked: '2026-08-13'
+    note: No first-party PHP client published or referenced in any Instant surface.
+notes:
+  - >-
+    The GitHub organization publishes 7 public repos; shopify-headless-theme
+    (412 stars, Liquid) and instant-sdk-examples are source-only and not
+    published to a package registry.
+  - >-
+    No package is published for the MCP surface — Instant's MCP server is a
+    hosted remote endpoint (see mcp/instant-commerce-mcp.yml), not an installable
+    stdio package.

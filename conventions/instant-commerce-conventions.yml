@@ -1,0 +1,127 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+description: >-
+  Cross-cutting runtime semantics for the Instant API surface. Instant publishes
+  no API reference, no OpenAPI and no conventions document, so this artifact
+  records what the provider's help center states plus what was directly observed
+  on live unauthenticated requests to api.instant.so. Most rows below are honest
+  ABSENCES — an agent integrating over MCP has no documented idempotency,
+  pagination, tracing or versioning contract to rely on. Absences are recorded
+  explicitly rather than omitted, because "not documented" and "not checked" are
+  different facts.
+docs:
+  - https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+  - https://docs.instantcommerce.io/developer/getting-started/authentication
+surfaces:
+  - id: mcp
+    name: Instant MCP server
+    url: https://api.instant.so/mcp
+    protocol: Model Context Protocol over HTTP
+    status: beta
+    documented: true
+  - id: graphql
+    name: Undocumented Apollo GraphQL endpoint
+    url: https://api.instant.so/graphql
+    documented: false
+    note: >-
+      Present and responding, but not documented for third-party use;
+      introspection is disabled. Not registered as an API in apis.yml.
+  - id: storefront-js
+    name: Storefront SDK (browser)
+    url: window.Instant.api
+    documented: true
+authentication:
+  style: http-bearer
+  header: 'Authorization: Bearer <access token>'
+  credential: Project-scoped access token issued in the dashboard, shown once.
+  oauth: false
+  detail: authentication/instant-commerce-authentication.yml
+  evidence: >-
+    Confirmed by probe — an invalid bearer returns
+    {"message":"Invalid or revoked token",...} while a missing header returns
+    {"message":"Missing Authorization header",...}.
+idempotency:
+  supported: unknown
+  documented: false
+  header: null
+  note: >-
+    No idempotency key, header, retry-safety statement or replay-window is
+    documented for any Instant surface. The MCP tool set includes create/publish
+    operations on landing pages, so retry semantics matter, but the provider does
+    not state them. NOT recorded as supported and NO Idempotency pointer is
+    emitted in apis.yml.
+  checked: '2026-08-13'
+pagination:
+  supported: unknown
+  documented: false
+  style: null
+  note: >-
+    A "list landing pages" capability is documented for MCP but no page-size,
+    cursor or offset convention is published. Cannot be observed without an
+    authenticated token.
+  checked: '2026-08-13'
+field_expansion:
+  supported: partial
+  note: >-
+    The only documented shaping option is the MCP page-detail tool's optional
+    screenshot ("Fetch a page's details (optionally with a screenshot)"). No
+    general expand/fields/sparse-fieldset convention is published.
+metadata:
+  supported: unknown
+  documented: false
+  note: >-
+    No customer-defined metadata bag is documented on any Instant object.
+request_tracing:
+  request_id_header: null
+  observed_headers:
+    - name: x-cloud-trace-context
+      origin: Google Cloud infrastructure, not an Instant product convention
+      example_shape: '<32-hex-trace-id>'
+      note: >-
+        Present on every api.instant.so response because the service runs behind
+        Google Frontend. Instant does not document it, does not echo a
+        client-supplied correlation id, and does not reference it in support
+        guidance — so it is infrastructure leakage rather than a supported
+        tracing contract. An agent can still capture it when opening a ticket.
+    - name: etag
+      note: Weak ETag emitted by Express on JSON responses; no documented conditional-request contract.
+  checked: '2026-08-13'
+versioning:
+  api_versioning: none
+  note: >-
+    No version segment in the MCP path (/mcp, not /v1/mcp), no version header, no
+    date-pinned version. The product changelog is date-based with no semantic
+    version — see changelog/instant-commerce-changelog.yml. The MCP and access
+    token capability is labelled beta by the provider, which is the only
+    stability signal published.
+  detail: lifecycle/instant-commerce-lifecycle.yml
+error_envelope:
+  format: nestjs-default
+  rfc9457: false
+  content_type: application/json
+  shape: '{"message": string, "error": string, "statusCode": integer}'
+  detail: errors/instant-commerce-problem-types.yml
+rate_limit_signaling:
+  headers: none
+  status_on_exhaustion: unknown
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header observed. The binding
+    constraint is the AI-credit quota, which surfaces as a tool error rather than
+    a transport-level signal.
+  detail: rate-limits/instant-commerce-rate-limits.yml
+cors:
+  access_control_allow_origin: '*'
+  observed_on: https://api.instant.so/mcp
+  note: >-
+    The API host returns a wildcard CORS origin on the 401 response. Recorded as
+    observed; the authenticated behaviour is unknown.
+  checked: '2026-08-13'
+scope_boundaries:
+  note: >-
+    The single most consequential convention Instant does publish is a capability
+    boundary, not a protocol one: MCP operates on landing pages only. Product and
+    collection templates, sections, headers and footers, the cart and the
+    storefront home page are explicitly out of scope for agents and must be built
+    in the dashboard.
+  source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md

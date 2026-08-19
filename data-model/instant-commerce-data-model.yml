@@ -1,0 +1,188 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  docs.instant.so help center (MCP + storefront SDK articles) and
+  docs.instantcommerce.io JavaScript API reference
+description: >-
+  Entity graph for Instant, derived from the objects the provider documents
+  rather than from an OpenAPI — there is no spec in this repo to walk $refs
+  through. Every entity below is named in Instant's own documentation; field
+  lists are recorded only where the docs publish them literally (the storefront
+  cart objects), and are left empty where the docs name an entity without
+  describing its shape (the MCP-side objects). No field, type or identifier
+  format has been invented.
+confidence: medium
+confidence_note: >-
+  Relationships are read from documented behaviour and admin semantics, not from
+  a schema. MCP-side entity shapes require authenticated introspection.
+entities:
+  - name: Team
+    domain: account
+    description: An Instant team that owns projects; has a name, handle and a public profile.
+    source: https://docs.instant.so/en/articles/16068160-create-and-manage-a-team.md
+    relationships:
+      - has_many: Project
+      - has_many: Member
+  - name: Project
+    domain: account
+    description: >-
+      The unit an access token is scoped to, and the unit a plan and AI credit
+      balance attach to. Lives in a personal space or a team.
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    relationships:
+      - belongs_to: Team
+      - has_many: Layout
+      - has_many: AccessToken
+      - has_one: Plan
+      - has_one: AICreditBalance
+      - has_one: ShopifyStore
+  - name: Member
+    domain: account
+    description: A person on a project or team, with role Owner, Admin or Editor.
+    roles: [Owner, Admin, Editor]
+    source: https://docs.instant.so/en/articles/16068157-project-members-and-roles.md
+    relationships:
+      - has_many: AccessToken
+        via: created_by
+  - name: AccessToken
+    domain: auth
+    description: >-
+      Bearer credential for the MCP server. Documented attributes: name, masked
+      prefix, creator, last-used timestamp. The full value is displayed once.
+    fields:
+      - name: name
+      - name: masked_prefix
+      - name: created_by
+      - name: last_used_at
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    relationships:
+      - belongs_to: Project
+      - belongs_to: Member
+        via: created_by
+        note: Auto-revoked when the member loses project access.
+  - name: Layout
+    domain: content
+    description: >-
+      The umbrella content type. Documented subtypes: landing page, home page,
+      product page template, collection page template, blog post, theme section,
+      cart, header/footer, popup.
+    subtypes:
+      - LandingPage
+      - HomePage
+      - ProductPageTemplate
+      - CollectionPageTemplate
+      - BlogPost
+      - ThemeSection
+      - Cart
+      - ReusableComponent
+    source: https://docs.instant.so/en/articles/16068145-layout-types-overview.md
+    relationships:
+      - belongs_to: Project
+      - has_many: LayoutVersion
+      - has_one: SEOSettings
+  - name: LandingPage
+    domain: content
+    description: >-
+      The ONLY layout subtype reachable over MCP — list, create, edit, publish,
+      unpublish, and fetch details (optionally with a screenshot).
+    agent_reachable: true
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    relationships:
+      - belongs_to: Project
+  - name: LayoutVersion
+    domain: content
+    description: Automatic backup of a layout, restorable from layout settings.
+    source: https://docs.instant.so/en/articles/16068154-version-history.md
+    relationships:
+      - belongs_to: Layout
+  - name: BrandKit
+    domain: content
+    description: Colors, typography and components Instant AI builds against.
+    source: https://docs.instant.so/en/articles/16068073-set-up-a-brand-kit.md
+    relationships:
+      - belongs_to: Project
+  - name: AICreditBalance
+    domain: billing
+    description: >-
+      Monthly credit allowance shared by Instant AI, the Agent and Studio, plus
+      non-expiring purchased credits. Readable over MCP.
+    agent_reachable: true
+    source: https://docs.instant.so/en/articles/16068068-ai-credits.md
+    relationships:
+      - belongs_to: Project
+  - name: Plan
+    domain: billing
+    description: Free, Starter, Pro, Business or Enterprise/Agency; carries every published quota.
+    source: plans/instant-commerce-plans-pricing.yml
+    relationships:
+      - belongs_to: Project
+  - name: ABTest
+    domain: optimization
+    description: Experiment enrolling unique visitor sessions, metered monthly by plan.
+    source: https://docs.instant.so/en/articles/16068085-plan-limits-reference.md
+    relationships:
+      - belongs_to: Layout
+  - name: ShopifyStore
+    domain: integration
+    description: >-
+      The connected Shopify store. Instant does not expose its own commerce data
+      model — product, collection, cart and customer data are Shopify's, reached
+      through the Shopify Storefront API.
+    source: https://docs.instant.so/en/articles/16068136-connect-your-shopify-store.md
+    relationships:
+      - belongs_to: Project
+      - has_many: ShopifyCart
+  - name: ShopifyCart
+    domain: storefront
+    description: >-
+      Runtime cart object exposed to browser code as window.Instant.cart. The one
+      entity whose shape the docs publish literally.
+    fields:
+      - name: externalId
+        type: string
+        format: 'gid://shopify/Cart/<id>'
+      - name: lines
+        type: array
+        items: CartLine
+      - name: addLine
+        type: function
+      - name: updateLines
+        type: function
+    source: https://docs.instantcommerce.io/product/coding/javascript-api
+    relationships:
+      - has_many: CartLine
+  - name: CartLine
+    domain: storefront
+    fields:
+      - name: id
+        type: string
+        format: 'gid://shopify/CartLine/<id>?cart=<cart-id>'
+      - name: attributes
+        type: array
+        items: '{key, value}'
+      - name: product
+        type: object
+        note: 'Shopify product — id, handle, title'
+      - name: variant
+        type: object
+        note: 'Shopify variant — id, title'
+      - name: quantity
+        type: integer
+    source: https://docs.instantcommerce.io/product/coding/javascript-api
+    relationships:
+      - belongs_to: ShopifyCart
+identifier_conventions:
+  - domain: storefront
+    format: Shopify Global IDs — 'gid://shopify/<Type>/<numeric-id>'
+    note: >-
+      Instant's storefront objects carry Shopify GIDs, not Instant-native
+      identifiers. Instant does not publish an id-prefix scheme of its own.
+    source: https://docs.instantcommerce.io/product/coding/javascript-api
+gaps:
+  - >-
+    No identifier format, field list or type is published for Project, Layout,
+    LandingPage or AccessToken. These require authenticated MCP introspection.
+  - >-
+    The agent-reachable slice of this graph is narrow: LandingPage plus a
+    read-only view of Project and AICreditBalance. Every other entity is
+    dashboard-only.

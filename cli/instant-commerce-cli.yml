@@ -1,0 +1,91 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.instantcommerce.io/developer/reference/commands
+description: >-
+  Instant publishes a first-party CLI, @instantcommerce/cli, for developing and
+  publishing custom React blocks to the Instant platform. It is documented on the
+  company's Docusaurus developer site at docs.instantcommerce.io — a different
+  domain from the current product docs (docs.instant.so) because instantcommerce.io
+  is the company's own corporate domain and the developer docs were never moved to
+  the instant.so product domain. The CLI ships a local sandbox for isolated block
+  development (see sandbox/instant-commerce-sandbox.yml). Command surface below is
+  transcribed verbatim from the published commands reference.
+docs: https://docs.instantcommerce.io/developer/reference/commands
+name: Instant CLI
+binary: instant
+package: "@instantcommerce/cli"
+package_url: https://www.npmjs.com/package/@instantcommerce/cli
+version: 1.3.0
+published: '2023-05-12'
+install:
+  - method: npm
+    command: npm install -g @instantcommerce/cli
+    source: https://github.com/instantcommerce/instant-sdk
+authentication:
+  docs: https://docs.instantcommerce.io/developer/getting-started/authentication
+  summary: >-
+    Running any command that requires store access prompts an interactive login.
+    Tokens are refreshable via `instant refresh`; `instant select` switches the
+    active organization/storefront when the account has more than one.
+commands:
+  - group: account
+    commands:
+      - name: login
+        description: Login to your account.
+      - name: logout
+        description: Logout of current account.
+      - name: whoami
+        description: Displays information about your account.
+      - name: refresh
+        description: Refresh your access token.
+      - name: select
+        description: Switch between organizations / storefronts.
+  - group: project
+    commands:
+      - name: init <name> <template>
+        description: >-
+          Initialize a new Instant project. Available templates: ts-tailwind
+          (TypeScript & Tailwind CSS).
+      - name: generate <schematic> <name>
+        description: >-
+          Generate a new Instant element. Available schematics: block, page.
+  - group: development
+    commands:
+      - name: dev
+        description: >-
+          Start the local development environment, including the block sandbox
+          (enabled by default on a new project).
+  - group: publishing
+    commands:
+      - name: add [blocknames..]
+        description: >-
+          Add block(s) to the platform. Accepts a space-separated list of
+          blocknames to limit the operation.
+      - name: publish [blocknames..]
+        description: >-
+          Publish a new version of block(s). Accepts a space-separated list of
+          blocknames to limit the operation.
+  - group: meta
+    commands:
+      - name: --help
+        description: Show help.
+      - name: --version
+        description: Lists the version of Instant CLI that is installed.
+flows:
+  - name: Build and ship a custom block
+    steps:
+      - instant login
+      - instant select
+      - instant init my-blocks ts-tailwind
+      - instant generate block MyBlock
+      - instant dev
+      - instant publish MyBlock
+    source: https://docs.instantcommerce.io/developer/getting-started/start
+currency:
+  note: >-
+    The CLI's last npm release is 1.3.0 (2023-05-12) and the developer docs site
+    runs Docusaurus 2.3.1. This tooling belongs to the earlier headless/block
+    generation of the product; the company's current agent surface is the hosted
+    MCP server (2026-06-02). Recorded as observed, not as an end-of-life claim —
+    Instant publishes no deprecation notice for the CLI.
+  checked: '2026-08-13'

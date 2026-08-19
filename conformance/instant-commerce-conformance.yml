@@ -1,0 +1,144 @@
+generated: '2026-08-13'
+method: probed
+source: live probes of https://api.instant.so plus Instant's published documentation
+description: >-
+  Cross-cutting standards conformance for the Instant API surface. Assessed
+  against live probes and the provider's own documentation; there is no OpenAPI
+  in this repo to derive from, so nothing below is inferred from a spec. A
+  `conforms: false` here means the standard is genuinely not adopted or not
+  published, not that it was unreachable.
+standards:
+  - id: mcp
+    name: Model Context Protocol
+    conforms: true
+    evidence: >-
+      A hosted remote MCP server is documented by the provider ("connect external
+      AI clients to your Instant project over the Model Context Protocol") and the
+      endpoint https://api.instant.so/mcp is a live, registered, auth-guarded
+      route — 401 with a bearer-token challenge, while unregistered paths on the
+      same host return 404.
+    version: unknown
+    note: >-
+      Protocol version cannot be confirmed without a token; initialize returns 401
+      anonymously. Conformance is asserted for the existence and reachability of
+      an MCP surface, not for a specific spec revision.
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    checked: '2026-08-13'
+  - id: mcp-oauth
+    name: MCP authorization (OAuth 2.1 / RFC 9728 protected-resource metadata)
+    conforms: false
+    evidence: >-
+      /.well-known/oauth-authorization-server, /.well-known/oauth-protected-resource
+      and /.well-known/oauth-protected-resource/mcp all return 404 on
+      api.instant.so. Authorization is a manually pasted dashboard-issued bearer
+      token, so a compliant MCP client cannot discover the authorization server or
+      perform dynamic client registration.
+    checked: '2026-08-13'
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: false
+    evidence: No OAuth flow, authorization endpoint or scope vocabulary is documented or served.
+    checked: '2026-08-13'
+  - id: oidc
+    name: OpenID Connect
+    conforms: false
+    evidence: /.well-known/openid-configuration returns 404 on instant.so, api.instant.so, app.instant.so and instantcommerce.io.
+    checked: '2026-08-13'
+  - id: openapi
+    name: OpenAPI
+    conforms: false
+    evidence: >-
+      No OpenAPI or Swagger document is served. Probed /openapi.json,
+      /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs and /redoc
+      on api.instant.so (JSON 404 for each), instant.so and docs.instant.so.
+    checked: '2026-08-13'
+  - id: graphql
+    name: GraphQL
+    conforms: partial
+    evidence: >-
+      An Apollo Server GraphQL endpoint responds at https://api.instant.so/graphql
+      with standard GraphQL error envelopes, but introspection is disabled
+      (INTROSPECTION_DISABLED) and CSRF prevention is enabled, so no SDL can be
+      retrieved. The endpoint is undocumented for third-party use and appears to
+      serve Instant's own application; it is recorded, not registered as a public
+      API and not saved as a schema.
+    checked: '2026-08-13'
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: >-
+      Error responses use the NestJS default envelope
+      {"message","error","statusCode"} with Content-Type application/json — no
+      application/problem+json, no type/title/detail/instance members.
+    detail: errors/instant-commerce-problem-types.yml
+    checked: '2026-08-13'
+  - id: rfc8594
+    name: RFC 8594 Sunset header / deprecation signalling
+    conforms: false
+    evidence: No Sunset or Deprecation header contract is documented and no deprecation policy is published.
+    checked: '2026-08-13'
+  - id: rfc9111-ratelimit-headers
+    name: RateLimit header fields for HTTP
+    conforms: false
+    evidence: No X-RateLimit-*, RateLimit-* or Retry-After header observed on any api.instant.so response.
+    detail: rate-limits/instant-commerce-rate-limits.yml
+    checked: '2026-08-13'
+  - id: idempotency
+    name: Idempotency keys
+    conforms: false
+    evidence: No idempotency header or retry-safety statement is documented for any surface.
+    checked: '2026-08-13'
+  - id: security-txt
+    name: RFC 9116 security.txt
+    conforms: false
+    evidence: >-
+      404 on instant.so, api.instant.so, app.instant.so and instantcommerce.io.
+      The single 200 at docs.instant.so is Intercom's own vendor file
+      (Canonical app.intercom.com), not Instant's.
+    detail: well-known/instant-commerce-well-known.yml
+    checked: '2026-08-13'
+  - id: a2a
+    name: A2A Agent Card
+    conforms: false
+    evidence: >-
+      /.well-known/agent-card.json and /.well-known/agent.json return 404 on
+      api.instant.so, instant.so, app.instant.so, docs.instant.so and
+      instantcommerce.io. No card is published, so no A2A artifact was written.
+    checked: '2026-08-13'
+  - id: llmstxt
+    name: llms.txt
+    conforms: true
+    evidence: >-
+      https://docs.instant.so/llms.txt returns 200 text/plain with a conformant
+      llms.txt — H1 title, blockquote summary, and sectioned link lists across 146
+      lines covering the whole help center, with a .md twin for every article.
+      Generated by the Intercom help-center platform but served from Instant's own
+      docs host and describing Instant's own content.
+    saved: llms/instant-commerce-llms.txt
+    checked: '2026-08-13'
+  - id: hsts
+    name: HTTP Strict Transport Security
+    conforms: true
+    evidence: 'strict-transport-security: max-age=31536000 observed on instant.so.'
+    detail: security/instant-commerce-domain-security.yml
+    checked: '2026-08-13'
+compliance_programs:
+  published: false
+  note: >-
+    No trust center, SOC 2, ISO 27001, PCI, HIPAA or GDPR certification page was
+    found. probe-security-programs.py returned vdp=none trust=none; instant.so/security,
+    instant.so/trust, instant.so/legal/security and instant.so/dpa all 404 and
+    trust.instant.so does not resolve. No Compliance pointer is emitted in apis.yml.
+  checked: '2026-08-13'
+  probed:
+    - url: https://instant.so/security
+      status: 404
+    - url: https://instant.so/trust
+      status: 404
+    - url: https://instant.so/legal/security
+      status: 404
+    - url: https://instant.so/dpa
+      status: 404
+    - url: https://trust.instant.so
+      status: 0
+      note: DNS does not resolve.

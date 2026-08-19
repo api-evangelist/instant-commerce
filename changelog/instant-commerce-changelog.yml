@@ -1,4 +1,4 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 source: https://instant.so/changelog
 description: >-
@@ -6,12 +6,19 @@ description: >-
   Instant does not publish an explicit version scheme; updates are organized
   chronologically by release date. The live changelog at
   https://instant.so/changelog is the source of truth; this artifact records the
-  recent window only.
+  recent window only. Re-read 2026-08-13: added the 2026-07-30 Font Drop entry
+  and CORRECTED the Instant MCP release date from 2026-05-07 to 2026-06-02, which
+  is the date the live changelog card carries.
 docs: https://instant.so/changelog
+feature_requests: https://feedback.instant.so
 versioning:
   scheme: date-based product updates (no semantic version)
-  current: '2026-07-16'
+  current: '2026-07-30'
 entries:
+  - date: '2026-07-30'
+    title: Font Drop
+    highlights:
+      - 98 curated fonts added to the editor for building Shopify pages without leaving it.
   - date: '2026-07-16'
     title: Quick Actions
     highlights:
@@ -24,15 +31,47 @@ entries:
     title: Brand Intelligence
     highlights:
       - Instant AI understands your brand before generating layouts.
-  - date: '2026-05-07'
+  - date: '2026-06-02'
     title: Instant MCP
     highlights:
-      - Connect Claude and other AI tools directly to Instant via Model Context Protocol for seamless page creation.
+      - >-
+        Connect Claude and other AI tools directly to Instant with MCP. Create
+        landing pages, edit layouts, and build Shopify experiences from prompts
+        within an AI workflow.
+    agent_surface: true
+    detail: mcp/instant-commerce-mcp.yml
   - date: '2026-05-07'
     title: Tabs 2.0 & Build carts with Instant AI agents
     highlights:
-      - Tabs element supports dynamic styling; AI-powered cart building with Shopify integration.
+      - Tabs element is fully dynamic — style menu items freely and edit content on the canvas.
+      - AI-powered cart building with Shopify integration — cart rewards, upsells and add-ons.
   - date: '2026-04-15'
     title: Instant Spring Event '26
     highlights:
       - An AI team inside the canvas — describe what you want and Instant builds it.
+  - date: '2026-03-31'
+    title: Add Video Anywhere
+    highlights:
+      - New Media element allows images and videos interchangeably in one component.
+  - date: '2026-03-11'
+    title: AI Avatar Builder
+    highlights:
+      - AI Avatar Builder launched in Instant Studio, plus unit price and collection metafield support.
+  - date: '2026-02-26'
+    title: Instant Studio
+    highlights:
+      - Generate on-brand product shots and lifestyle images with AI.
+  - date: '2026-02-18'
+    title: Instant AI v0.3
+    highlights:
+      - Generate PDPs, listicle pages and a working buy box.
+  - date: '2026-02-11'
+    title: 'Product update: Instant AI'
+    highlights:
+      - Instant AI generates complete landing pages, homepages and product pages from the store and selected product.
+breaking_changes:
+  published: false
+  note: >-
+    The changelog records additions only. No entry in the captured window
+    announces a breaking change, a deprecation, or the status of the older block
+    SDK/CLI tooling. See lifecycle/instant-commerce-lifecycle.yml.

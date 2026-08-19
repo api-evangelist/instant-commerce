@@ -1,25 +1,113 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 status: published
-source: https://instant.so/changelog
+source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
 description: >-
-  Instant operates a hosted Model Context Protocol (MCP) server that lets Claude
-  and other AI tools connect directly to Instant to build Shopify pages. The
-  capability was announced in the Instant product changelog on 2026-05-07
-  ("Instant MCP — Connect Claude and other AI tools directly to Instant via
-  Model Context Protocol for seamless page creation"). A remote endpoint at
-  https://api.instant.so/mcp responds 401 (authentication required) to
-  unauthenticated probes, confirming a live, auth-gated server. The tool list is
-  not published publicly and is gated behind authentication, so it is not
-  enumerated here.
+  Instant operates a hosted, remote Model Context Protocol (MCP) server that
+  lets external AI clients such as Claude Desktop and Cursor work with an Instant
+  project. It was announced in the product changelog on 2026-06-02 ("Instant MCP
+  — Connect Claude and other AI tools directly to Instant with MCP") and is
+  documented in the help center article "Access tokens and MCP", which labels the
+  access-token/MCP capability a beta feature. The server is auth-gated: a live
+  probe of https://api.instant.so/mcp returns 401 to both GET and POST, so the
+  tool list and input schemas are not publicly enumerable. The capabilities below
+  are transcribed from the provider's own documentation, NOT from tools/list, and
+  are therefore recorded as documented capability groups rather than as tool
+  names with schemas.
+docs: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+announced: '2026-06-02'
+maturity: beta
 server:
   name: instant
   transport: http
   url: https://api.instant.so/mcp
   auth: required
+  auth_scheme: http-bearer
   auth_probe_status: 401
+deployment:
+  mode: remote
+  endpoint: https://api.instant.so/mcp
+  install: ''
+  package: ''
+  auth: api-key
+  verified: probed
 tools: []
+documented_capabilities:
+  - group: landing-pages
+    summary: List, create, edit, publish and unpublish landing pages in the project.
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    consumes_ai_credits: partial
+  - group: agent
+    summary: >-
+      Send natural-language instructions to Instant's AI page-builder agent to
+      build or change a page.
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    consumes_ai_credits: true
+  - group: read
+    summary: >-
+      Fetch a page's details (optionally with a screenshot), the project info,
+      and the AI credit balance.
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    consumes_ai_credits: false
+scope_limits:
+  - >-
+    MCP covers landing pages ONLY. The provider states it does not cover product
+    or collection templates, sections, headers and footers, the cart, or the
+    storefront home page — those must be built in the dashboard.
+  - >-
+    A token is scoped to a single project and tied to the member who created it;
+    if that member loses project access their tokens are revoked automatically.
+  - >-
+    Only project owners and admins can create or revoke access tokens.
+  - >-
+    Agent tools draw on the project's AI credit balance (the same pool as the
+    dashboard Agent and Studio) and return an error when the project is out of
+    credits — so the agent will not run on the Free plan, which includes no
+    credits. Reading data and checking status do not consume credits.
+evidence:
+  - probe: 'POST https://api.instant.so/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    status: 401
+    body: '{"message":"Missing Authorization header","error":"Unauthorized","statusCode":401}'
+    checked: '2026-08-13'
+  - probe: 'POST https://api.instant.so/mcp with Authorization: Bearer <invalid>'
+    status: 401
+    body: '{"message":"Invalid or revoked token","error":"Unauthorized","statusCode":401}'
+    checked: '2026-08-13'
+    note: >-
+      Confirms the scheme is a bearer access token and that revocation is
+      enforced server-side, matching the documented token lifecycle.
+  - probe: POST https://api.instant.so/mcp-does-not-exist-xyz123
+    status: 404
+    body: '{"message":"Cannot POST /mcp-does-not-exist-xyz123","error":"Not Found","statusCode":404}'
+    checked: '2026-08-13'
+    note: >-
+      Route-existence discriminator. Unregistered paths on api.instant.so return
+      404, so the 401 on /mcp proves /mcp is a genuinely registered, auth-guarded
+      route rather than the effect of a blanket auth guard. The endpoint is not
+      guessed.
+oauth_metadata:
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 404
+  - note: >-
+      The server publishes no MCP OAuth discovery metadata. Authorization is a
+      long-lived access token created in the Instant dashboard
+      (Settings → General → Access tokens), copied once at creation, and passed
+      by the client — not an OAuth flow.
+install:
+  documented: >-
+    The token-creation dialog in the Instant dashboard shows a one-line install
+    command for Claude Desktop and links to setup instructions for other MCP
+    clients. That command is only rendered to an authenticated project
+    owner/admin, so it is not reproduced here.
 notes:
-  - Server confirmed live via HTTP 401 on https://api.instant.so/mcp (auth required).
-  - Announced in the 2026-05-07 "Instant MCP" changelog entry.
-  - Tool schema is behind authentication; not captured to avoid fabrication.
+  - Remote hosted server; there is no stdio package to install.
+  - >-
+    Tool names and inputSchemas require authenticated introspection; they are
+    deliberately not enumerated here to avoid fabrication.
+  - >-
+    The changelog date was corrected this round from 2026-05-07 to 2026-06-02
+    against the live changelog page.

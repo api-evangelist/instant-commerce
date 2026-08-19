@@ -1,0 +1,159 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.instant.so/en/articles/16068067-instant-storefront-sdk.md
+description: >-
+  Instant's client-side surface — the code that runs in a shopper's browser on a
+  published Shopify storefront, plus the React component/hook library a developer
+  uses to build custom blocks. This is distinct from the packages/ SDK inventory:
+  packages/ records what is published to a registry, this records the runtime
+  component and event surface a developer actually programs against. Two
+  generations coexist: the current Storefront SDK (window.Instant.api, documented
+  in the live help center) and the earlier block SDK component/hook library
+  (@instantcommerce/sdk, documented on docs.instantcommerce.io).
+docs:
+  - https://docs.instant.so/en/articles/16068067-instant-storefront-sdk.md
+  - https://docs.instantcommerce.io/developer/reference/components/define-block
+  - https://docs.instantcommerce.io/product/coding/javascript-api
+families:
+  - id: storefront-sdk
+    name: Instant Storefront SDK
+    generation: current
+    distribution: >-
+      Attached to the page by the Instant storefront script on a published
+      storefront. No package to install, no version to pin — read the loaded
+      client version from window.Instant.initializedVersion.
+    registry: none
+    version: null
+    version_note: >-
+      Unpinned by design: the storefront script is injected by the Instant theme
+      app embed and floats to whatever Instant deploys. A consumer cannot pin or
+      predict the version, only read it back at runtime.
+    global: window.Instant.api
+    availability_guard: 'if (window.Instant?.api) { ... }'
+    docs: https://docs.instant.so/en/articles/16068067-instant-storefront-sdk.md
+    methods:
+      - name: toggleCart(open?)
+        description: >-
+          Opens or closes the Instant cart drawer. Omit the argument to toggle,
+          true to open, false to close. Falls back to redirecting the shopper to
+          the Shopify cart page when no Instant cart is published.
+        returns: void
+      - name: updateCart()
+        description: >-
+          Re-reads the current Shopify cart and repaints Instant's cart UI — line
+          items, totals, count badges and rewards. Does NOT add, change or remove
+          items; mutation is delegated to Shopify's Ajax Cart API
+          (/cart/add.js, /cart/change.js), after which updateCart() syncs the UI.
+        returns: Promise
+    events:
+      dispatched_on: document
+      catalog:
+        - name: 'instant:cart-updated'
+          fires_when: Instant has finished refreshing its cart UI.
+          detail: none
+        - name: 'instant:add-to-cart'
+          fires_when: A shopper adds an item through an Instant action.
+          detail: '{ useInstantCart: boolean }'
+        - name: 'instant:open-cart'
+          fires_when: A shopper clicks a cart button that opens the cart.
+          detail: '{ useInstantCart: boolean }'
+      note: >-
+        useInstantCart is true when the action targets the Instant cart and false
+        when it targets a "Custom cart", which is the documented hook for wiring a
+        third-party drawer.
+  - id: block-sdk
+    name: Instant block SDK (React)
+    generation: legacy
+    distribution: npm
+    registry: npm
+    package: "@instantcommerce/sdk"
+    version: 1.0.0
+    published: '2022-12-22'
+    docs: https://docs.instantcommerce.io/developer/reference/components/define-block
+    description: >-
+      React library for building custom blocks published to the Instant platform
+      via the CLI. Blocks declare a content schema and a customizer schema which
+      render as editable fields in the Instant admin.
+    components:
+      - defineBlock
+      - Link
+      - RichText
+    hooks:
+      - name: useBlockState
+        description: Returns the CMS content and the customizer values configured in the Instant admin.
+      - name: useCart
+      - name: useCustomer
+      - name: useEvents
+      - name: useRequestData
+        description: >-
+          Visitor request context — country (ISO 3166-1 alpha-2, "XX" when
+          undetermined, "T1" on TOR) and Unicode locale identifier.
+      - name: useShopifyClient
+        description: >-
+          Returns a GraphQL client for querying Shopify's Storefront API with
+          custom queries. Instant proxies to Shopify rather than exposing its own
+          commerce data API.
+      - name: useTheme
+      - name: useToast
+    schemas:
+      - content-schema
+      - customizer-schema
+    examples: https://github.com/instantcommerce/instant-sdk-examples
+  - id: legacy-window-instant
+    name: window.Instant storefront objects (headless generation)
+    generation: legacy
+    docs: https://docs.instantcommerce.io/product/coding/javascript-api
+    description: >-
+      The earlier headless-storefront JavaScript API. Documented on the company's
+      Docusaurus site and superseded by the Storefront SDK above; recorded because
+      it is still published and materially larger.
+    objects:
+      - name: window.Instant.cart
+        members: [externalId, lines, addLine(), updateLines()]
+      - name: window.Instant.request
+        members: [country, locale]
+      - name: window.Instant.Toast
+        members: [create(), dismissAll(), removeAll()]
+    cancelable_events:
+      - name: instantAddToCart
+        cancelable: true
+        detail: 'product payload + resume() to continue after preventDefault()'
+      - name: instantCheckout
+        cancelable: true
+        detail: '{ checkoutUrl }'
+      - name: instantUpdateCartLine
+        cancelable: true
+        detail: '{ lineId, quantity }'
+      - name: instantSubscribeToNewsletter
+        cancelable: true
+        detail: '{ input: { email, type: SHOPIFY|KLAVIYO|MAILCHIMP }, onSuccess(), onError() }'
+      - name: instantLoadPage
+        cancelable: false
+        detail: >-
+          { page } — one of account, activate-account, blog-post, blog, cart,
+          forgot-password, home, login, product-listing, product-detail,
+          register, search, wishlist, dynamic
+embeddable_surfaces:
+  - name: Figma plugin
+    description: >-
+      AI mode turns a selected Figma frame into an Agent prompt that rebuilds the
+      design in Instant. Included on every plan, Free upward.
+    docs: https://docs.instant.so/en/articles/16068071-import-designs-from-figma.md
+  - name: Shopify theme app embed
+    description: >-
+      "Instant Embed" must be enabled in the Shopify theme for Instant pages and
+      sections to load and for publishing to verify.
+    docs: https://docs.instant.so/en/articles/16068138-enable-the-instant-app-embed.md
+  - name: App islands
+    description: >-
+      Reserves a slot in an Instant layout where Shopify app blocks render on the
+      published storefront.
+    docs: https://docs.instant.so/en/articles/16068109-app-islands.md
+  - name: Custom Liquid blocks
+    description: Runs Shopify Liquid inside an Instant layout. Starter plan and up.
+    docs: https://docs.instant.so/en/articles/16068110-custom-liquid-blocks.md
+notes:
+  - >-
+    The event catalogs above are browser DOM CustomEvents, not server-delivered
+    webhooks. Instant documents no HTTP webhook or event-subscription surface, so
+    no AsyncAPI or Webhooks artifact is emitted.

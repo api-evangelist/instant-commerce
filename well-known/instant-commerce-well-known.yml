@@ -1,14 +1,23 @@
-generated: '2026-07-19'
-method: searched
+generated: '2026-08-13'
+method: probed
+source: live HTTP probes of every Instant Commerce public host
 description: >-
-  Results of probing the /.well-known/ discovery surface for the Instant
-  Commerce public hosts. Status is the HTTP code observed at fetch time. No
-  first-party well-known documents were found: instant.so returns 404 for every
-  probed path, and docs.instant.so/.well-known/security.txt returns 200 but is
-  the generic Intercom help-center security.txt (Canonical:
-  https://app.intercom.com/.well-known/security.txt), i.e. the help-desk vendor's
-  file, not Instant's own — so it is recorded but not saved as first-party and no
-  SecurityTxt pointer is emitted. Absence of records is valid, expected data.
+  Results of probing the /.well-known/ discovery surface for every Instant
+  Commerce public host, including the API host api.instant.so added this round.
+  Status is the HTTP code observed at fetch time (2026-08-13). NO first-party
+  well-known document is served anywhere: every path 404s on instant.so,
+  api.instant.so, app.instant.so and instantcommerce.io, and the single 200 —
+  docs.instant.so/.well-known/security.txt — is the generic Intercom help-center
+  security.txt (Canonical: https://app.intercom.com/.well-known/security.txt),
+  i.e. the help-desk vendor's file served through Instant's docs CNAME, not
+  Instant's own. It is recorded but NOT saved as first-party, and no WellKnown
+  or SecurityTxt pointer is emitted in apis.yml. Absence of records is valid,
+  expected data.
+pointer_emitted: false
+pointer_reason: >-
+  No probed path returned a 200 carrying a first-party document. Emitting a
+  WellKnown pointer here would assert that Instant serves a discovery surface it
+  does not serve.
 hosts:
   - host: https://instant.so
     documents:
@@ -22,13 +31,78 @@ hosts:
         status: 404
       - path: /.well-known/ai-plugin.json
         status: 404
+  - host: https://api.instant.so
+    note: >-
+      The API host (NestJS/Express behind Google Frontend). Returns a JSON 404
+      envelope for every well-known path, including the MCP OAuth discovery
+      documents an MCP client would look for.
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/oauth-protected-resource/mcp
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://app.instant.so
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
   - host: https://instantcommerce.io
     documents:
       - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
         status: 404
   - host: https://docs.instant.so
     documents:
       - path: /.well-known/security.txt
         status: 200
         first_party: false
-        note: Generic Intercom help-center security.txt (Canonical app.intercom.com); not Instant's own.
+        content_type: text/plain
+        note: >-
+          Generic Intercom help-center security.txt ("# Intercom - reporting
+          security vulnerabilities to Intercom", Canonical
+          app.intercom.com/.well-known/security.txt). The help-desk vendor's
+          file, not Instant's — not saved and not credited.
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404

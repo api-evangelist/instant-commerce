@@ -1,0 +1,99 @@
+generated: '2026-08-13'
+method: searched
+source: https://instant.so/changelog
+description: >-
+  Versioning, deprecation and operational-status posture for Instant. The company
+  ships a dated product changelog and operates a public status page, but
+  publishes no API versioning policy, no deprecation policy, no Sunset/Deprecation
+  header contract (RFC 8594) and no SLA. The most material lifecycle fact is a
+  generational one: the documented developer tooling (block SDK, CLI, Docusaurus
+  developer site) has had no release since 2023, while the current agent surface
+  — the MCP server — shipped 2026-06-02 and is labelled beta. Neither transition
+  is announced as a deprecation anywhere on Instant's surface.
+versioning:
+  scheme: date-based product updates
+  api_versioning: none
+  current_release: '2026-07-30'
+  note: >-
+    No semantic version, no /v1 path segment, no version header, no date-pinned
+    API version. See conventions/instant-commerce-conventions.yml.
+  docs: https://instant.so/changelog
+maturity_flags:
+  - feature: Access tokens and MCP
+    status: beta
+    declared_by: provider
+    source: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+    note: >-
+      "Access tokens are a beta feature." No GA date, no beta terms, and no
+      statement of breaking-change policy during beta.
+deprecation:
+  policy_published: false
+  sunset_header: not documented
+  deprecation_header: not documented
+  rfc8594: false
+  note: >-
+    No deprecation policy, notice period, or header contract is published on
+    instant.so, docs.instant.so or docs.instantcommerce.io. No Deprecation
+    pointer is emitted in apis.yml.
+  checked: '2026-08-13'
+status_page:
+  url: https://status.instant.so/
+  http_status: 200
+  machine_readable: false
+  probe:
+    - path: /api/v2/status.json
+      status: 200
+      content_type: text/html
+      note: Returns the status page HTML shell, not JSON — SPA catch-all, not an Atlassian Statuspage API.
+    - path: /api/v2/summary.json
+      status: 200
+      content_type: text/html
+    - path: /summary.json
+      status: 200
+      content_type: text/html
+  note: >-
+    A human-readable status page is served and is linked from instant.so, so the
+    StatusPage pointer is genuine. But every machine-readable status path returns
+    the HTML shell with a 200, so an agent cannot programmatically read incident
+    state — a soft-200, not a status API. Recorded so the 200 is not mistaken for
+    evidence of a JSON endpoint.
+  checked: '2026-08-13'
+sla:
+  published: false
+  note: >-
+    No uptime commitment or credit scheme is published for any tier. Support
+    tiers differ by plan (email on Free, 24/7 live chat on Starter and Pro,
+    Priority+ on Business) but are not expressed as a response-time SLA.
+support_channels:
+  - channel: email
+    address: support@instant.so
+    plans: [Free]
+  - channel: live chat
+    plans: [Starter, Pro]
+    note: 24/7 per the pricing page.
+  - channel: Priority+
+    plans: [Business]
+  - channel: dedicated Slack channel
+    plans: [Enterprise / Agency]
+  - channel: community
+    url: https://instant.so/community
+    note: Redirects to a Slack workspace invite (probe returned 403 to an unauthenticated client).
+  - channel: feedback / roadmap
+    url: https://feedback.instant.so
+    http_status: 200
+generational_transition:
+  observed: true
+  note: >-
+    Two developer generations coexist without any published transition notice.
+    The block SDK (@instantcommerce/sdk 1.0.0, 2022-12-22), the CLI
+    (@instantcommerce/cli 1.3.0, 2023-05-12) and the developer docs site
+    (docs.instantcommerce.io, Docusaurus 2.3.1) describe a headless-storefront
+    product; the live product (instant.so, a Shopify page builder) documents a
+    different surface at docs.instant.so and reaches agents through MCP. Instant
+    has neither deprecated nor re-released the older tooling. Recorded as an
+    observation from registry and docs metadata, not as a support claim.
+  evidence:
+    - https://registry.npmjs.org/@instantcommerce%2Fsdk
+    - https://registry.npmjs.org/@instantcommerce%2Fcli
+    - https://docs.instantcommerce.io/
+  checked: '2026-08-13'

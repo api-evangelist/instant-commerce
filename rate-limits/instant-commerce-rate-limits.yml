@@ -1,0 +1,114 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.instant.so/en/articles/16068085-plan-limits-reference.md
+description: >-
+  Instant publishes NO HTTP rate limits for its API host and returns no
+  rate-limit response headers, so an agent has no runtime signal to back off on.
+  What Instant does publish, and what actually stops a client, is a set of
+  plan-attached CONSUMPTION QUOTAS — AI credits and A/B test sessions — recorded
+  below because they are the real ceiling on MCP agent activity: the documented
+  MCP tools that run the AI page-builder agent draw on the project's AI credit
+  balance and start returning an error once it is exhausted.
+docs:
+  - https://docs.instant.so/en/articles/16068085-plan-limits-reference.md
+  - https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp.md
+http_rate_limits:
+  limit_count: 0
+  note: >-
+    No published per-key, per-account or per-endpoint HTTP rate limit was found
+    on docs.instant.so or docs.instantcommerce.io. An honest zero, not an
+    unchecked field.
+  headers_observed: []
+  headers_probe:
+    url: https://api.instant.so/mcp
+    method: POST
+    status: 401
+    response_headers:
+      - x-powered-by
+      - access-control-allow-origin
+      - content-type
+      - etag
+      - vary
+      - x-cloud-trace-context
+      - date
+      - server
+      - content-length
+      - via
+      - alt-svc
+    note: >-
+      No X-RateLimit-*, RateLimit-* or Retry-After header is returned. Eight
+      consecutive unauthenticated requests all returned 401 with no throttling
+      response, so no 429 behaviour could be observed anonymously.
+    checked: '2026-08-13'
+  exhaustion_status: unknown
+consumption_quotas:
+  - id: ai-credits
+    scope: per-project, per-billing-cycle
+    window: monthly (resets each billing cycle)
+    meters:
+      - plan: Free
+        included: 0
+      - plan: Starter
+        included: 1000
+      - plan: Pro
+        included: 4000
+      - plan: Business
+        included: 10000
+      - plan: Enterprise / Agency
+        included: flexible
+        note: Arranged by agreement; not published.
+    consumers:
+      - Instant AI
+      - The Agent (dashboard and MCP)
+      - Studio (AI product imagery)
+    typical_usage:
+      note: >-
+        Provider's own estimate — 1,000 credits ≈ 50 Agent tasks or 100 Studio
+        images; 4,000 ≈ 200 tasks or 400 images; 10,000 ≈ 500 tasks or 1,000
+        images. Actual usage varies by request size.
+    overage: >-
+      Extra credits can be purchased from Settings → Plans. Purchased credits are
+      consumed after the monthly allowance and do not expire.
+    exhaustion_behavior: >-
+      MCP tools that run the AI agent return an error until credits reset or more
+      are bought. Reading data and checking status do not consume credits. The
+      agent will not run at all on the Free plan, which includes no credits.
+    agent_impact: high
+  - id: ab-test-sessions
+    scope: per-project
+    window: monthly
+    meters:
+      - plan: Free
+        included: 0
+        note: A/B testing not available.
+      - plan: Starter
+        included: 0
+        note: A/B testing not available.
+      - plan: Pro
+        included: 10000
+      - plan: Business
+        included: 100000
+    unit: unique visitor sessions enrolled in an active test
+    exhaustion_behavior: End tests, wait for the monthly reset, or upgrade.
+  - id: reusable-content
+    scope: per-project
+    window: concurrent (not time-windowed)
+    meters:
+      - plan: Starter
+        sections: 10
+        templates: 3
+      - plan: Pro
+        sections: 20
+        templates: 5
+      - plan: Business
+        sections: 50
+        templates: 10
+    note: >-
+      Counts distinct section/template definitions, not placements; both can be
+      used on unlimited pages/products.
+    exhaustion_behavior: Unpublish unused items or upgrade.
+authoritative_source_note: >-
+  The provider states that the limits for a given account are always shown in
+  Settings → Plans and that Enterprise and partner plans carry their own
+  unpublished limits, so the public tables are indicative for the four public
+  tiers only.
