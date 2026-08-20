@@ -46,6 +46,19 @@ image: https://instantcommerce.io/og-image.jpg
 tags:
 - Company
 - Ai Enterprise Software
+- E-Commerce
+- Shopify
+- No-Code
+- Page Builder
+- Artificial Intelligence
+- AI Agents
+- Conversion Rate Optimization
+- Developer Tools
+- MCP
+- agent-native
+tags_raw:
+- Company
+- Ai Enterprise Software
 - Ecommerce
 - Shopify
 - No Code
@@ -76,6 +89,15 @@ apis:
   humanURL: https://docs.instant.so/en/articles/16068062-access-tokens-and-mcp
   baseURL: https://api.instant.so/mcp
   tags:
+  - MCP
+  - agent-native
+  - E-Commerce
+  - Shopify
+  - Page Builder
+  - Landing Pages
+  - AI Agents
+  - Content Management
+  tags_raw:
   - mcp
   - agent-native
   - ecommerce
